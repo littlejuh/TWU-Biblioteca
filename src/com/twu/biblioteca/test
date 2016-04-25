@@ -1,0 +1,27 @@
+1. Who checked out the book 'The Hobbit’? Anand Beck
+         select member.name from book inner join checkout_item on checkout_item.book_id = book.id inner join member on member.id = checkout_item.member_id where book.title = "The Hobbit";
+
+2. How many people have not checked out anything? 37 people.
+        select count(*) from member where member.id not in (select member_id from checkout_item);
+
+3. What books and movies aren't checked out?
+        id          title
+        2           Fellowship of the Ring
+        6           1984
+        6           Thin Red Line
+        7           Crouching Tiger, Hidde
+        7           Tom Sawyer
+        8           Catcher in the Rye
+        8           Lawrence of Arabia
+        9           Office Space
+        9           To Kill a Mockingbird
+        10          Domain Driven Design
+
+4. Add the book 'The Pragmatic Programmer', and add yourself as a member. Check out 'The Pragmatic Programmer'. Use your query from question 1 to verify that you have checked it out. Also, provide the SQL used to update the database.
+        insert into book(title) values ("The Pragmatic Programmer");
+        insert into member(name) values ("Juliana");
+        insert into checkout_item(member_id, book_id) values (43, 11);
+        select member.name from book inner join checkout_item on checkout_item.book_id = book.id inner join member on member.id = checkout_item.member_id where book.title = "The Pragmatic Programmer";
+
+5. Who has checked out more that 1 item?  Tip: Research the GROUP BY syntax.
+        select count(member.id) as total_member, member.name from checkout_item inner join member on checkout_item.member_id = member.id group by member.id having total_member > 1;

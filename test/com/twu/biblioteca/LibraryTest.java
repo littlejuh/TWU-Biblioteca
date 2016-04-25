@@ -9,20 +9,20 @@ import static org.junit.Assert.assertEquals;
 
 public class LibraryTest {
     private Library library;
-    private ArrayList<Book> booksAvailableExpected;
+    private ArrayList<Item> itemsAvailableExpected;
 
     @Before
     public void setUp(){
         this.library = new Library();
-        this.booksAvailableExpected = new ArrayList<>();
-        this.booksAvailableExpected.add(new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925, true));
-        this.booksAvailableExpected.add(new Book("Nineteen Eighty-Four", "George Orwell", 1949, true));
-        this.booksAvailableExpected.add(new Book("Ulysses", "James Joyce", 1922, true));
+        this.itemsAvailableExpected = new ArrayList<>();
+        this.itemsAvailableExpected.add(new Book("The Great Gatsby", 1925, true, "F. Scott Fitzgerald"));
+        this.itemsAvailableExpected.add(new Book("Nineteen Eighty-Four", 1949, true, "George Orwell"));
+        this.itemsAvailableExpected.add(new Book("Ulysses", 1922, true, "James Joyce"));
     }
 
     @Test
     public void shouldAllBooksAvailable() throws Exception {
-        assertEquals(this.booksAvailableExpected.toString(), this.library.getAllBooksAvailable().toString());
+        assertEquals(this.itemsAvailableExpected.toString(), this.library.getAllBooksAvailable().toString());
     }
 
     @Test

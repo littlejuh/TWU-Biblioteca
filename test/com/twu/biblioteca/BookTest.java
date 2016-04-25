@@ -10,10 +10,15 @@ public class BookTest {
 
     @Before
     public void setUp(){
-         this.book = new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925, true);
+         this.book = new Book("The Great Gatsby", 1925, true, "F. Scott Fitzgerald");
+    }
+
+    @Test
+    public void shouldReturnBooksName(){
+        assertEquals("The Great Gatsby", this.book.getName());
     }
     @Test
     public void testToString() throws Exception {
-        assertEquals("Title: The Great Gatsby | Author: F. Scott Fitzgerald | Year published: 1925", book.toString());
+        assertEquals("Title: The Great Gatsby | Year published: 1925", book.toString());
     }
 }
