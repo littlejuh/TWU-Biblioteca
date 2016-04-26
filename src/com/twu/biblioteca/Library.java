@@ -24,8 +24,8 @@ public class Library {
         this.items.add(new Movie("Aladdin",  1922, true, "John Musker", "3"));
     }
 
-    public List<Item> getAllBooksAvailable() {
-         List<Item> availableBooks = new ArrayList<>();
+    public ArrayList<Item> getAllBooksAvailable() {
+        ArrayList<Item> availableBooks = new ArrayList<>();
         for (Item book : this.items) {
             if(book instanceof Book && book.isAvailable()){
                     availableBooks.add(book);
@@ -34,8 +34,8 @@ public class Library {
         return availableBooks;
     }
 
-    public List<Item> getAllMoviesAvailable() {
-        List<Item> availableMovies = new ArrayList<>();
+    public ArrayList<Item> getAllMoviesAvailable() {
+        ArrayList<Item> availableMovies = new ArrayList<>();
         for (Item movie : this.items) {
             if(movie instanceof Movie && movie.isAvailable()){
                 availableMovies.add(movie);

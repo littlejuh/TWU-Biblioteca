@@ -14,11 +14,7 @@ public class BookTest {
     }
 
     @Test
-    public void shouldReturnBooksName(){
+    public void shouldReturnBookName(){
         assertEquals("The Great Gatsby", this.book.getName());
-    }
-    @Test
-    public void testToString() throws Exception {
-        assertEquals("Title: The Great Gatsby | Year published: 1925", book.toString());
     }
 }

@@ -15,6 +15,8 @@ public class BibliotecaApp {
         ConsolePrinter.print(getWelcomeMessage());
         ConsolePrinter.print(Menu.getMenuMessage());
         ContentPrinter.print(Menu.getOptionsMenu());
+
+
         boolean handlerMenu = true;
         while (handlerMenu) {
             handlerMenu = Menu.handlerMenu(InputManager.getInput());

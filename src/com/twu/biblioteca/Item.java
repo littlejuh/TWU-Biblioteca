@@ -18,7 +18,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Title: "+ this.name + " | " + " | " + "Year published: " + this.year;
+        return "Title: "+ this.name + " | " + "Year published: " + this.year;
     }
 
     public String getName() {
