@@ -8,13 +8,17 @@ import java.util.List;
 
 public class Menu {
 
-    private static Library library = new Library();
+    private final Library library;
+
+    public Menu(Library library) {
+        this.library = library;
+    }
     
-    public static String getMenuMessage() {
+    public String getMenuMessage() {
         return "Choose from these choices:";
     }
 
-    public static List<String> getOptionsMenu() {
+    public List<String> getOptionsMenu() {
         List<String> optionsMenu = new ArrayList<>();
         optionsMenu.add("1 - List Books");
         optionsMenu.add("2 - Checkout Book");
@@ -23,7 +27,18 @@ public class Menu {
         return optionsMenu;
     }
 
-    public static boolean handlerMenu(String optionSelected) {
+    private boolean checkoutItem() {
+        ConsolePrinter.print("Write the name of the book:");
+        if (library.checkoutBook(InputManager.getInput())) {
+            ConsolePrinter.print("Thank you! Enjoy the book.");
+        } else {
+            ConsolePrinter.print("That book is not available.");
+        }
+        return true;
+    }
+
+
+    public boolean handlerMenu(String optionSelected) {
         switch (optionSelected) {
             case "List Books":
             case "1":
@@ -45,18 +60,7 @@ public class Menu {
         }
     }
 
-
-    private static boolean checkoutItem() {
-        ConsolePrinter.print("Write the name of the book:");
-        if (library.checkoutBook(InputManager.getInput())) {
-            ConsolePrinter.print("Thank you! Enjoy the book.");
-        } else {
-            ConsolePrinter.print("That book is not available.");
-        }
-        return true;
-    }
-
-    private static boolean returnItem() {
+    private boolean returnItem() {
         ConsolePrinter.print("Write the name of the book:");
         if (library.returnBook(InputManager.getInput())) {
             ConsolePrinter.print("Thank you for returning the book.");

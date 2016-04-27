@@ -17,10 +17,11 @@ public class MenuTest {
     @Test
     public void shouldGetOptionsMenu() {
         List<String> optionsMenu = new ArrayList<>();
+        Menu menu = new Menu();
         optionsMenu.add("1 - List Books");
         optionsMenu.add("2 - Checkout Book");
         optionsMenu.add("3 - Return Book");
         optionsMenu.add("4 - Quit");
-        assertEquals(optionsMenu, Menu.getOptionsMenu());
+        assertEquals(optionsMenu, menu.getOptionsMenu());
     }
 }

@@ -12,14 +12,16 @@ public class BibliotecaApp {
 
 
     public static void main(String[] args) {
+        Library library = new Library();
+        Menu menu = new Menu(library);
         ConsolePrinter.print(getWelcomeMessage());
-        ConsolePrinter.print(Menu.getMenuMessage());
-        ContentPrinter.print(Menu.getOptionsMenu());
+        ConsolePrinter.print(menu.getMenuMessage());
+        ContentPrinter.print(menu.getOptionsMenu());
 
 
         boolean handlerMenu = true;
         while (handlerMenu) {
-            handlerMenu = Menu.handlerMenu(InputManager.getInput());
+            handlerMenu = menu.handlerMenu(InputManager.getInput());
         }
     }
 
