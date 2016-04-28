@@ -1,86 +1,140 @@
 package com.twu.biblioteca;
 
-import org.junit.Before;
+import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
+import com.twu.biblioteca.repository.BookRepository;
+import com.twu.biblioteca.repository.MovieRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class LibraryTest {
+    @Mock
+    private BookRepository bookRepository;
+
+    @Mock
+    private MovieRepository movieRepository;
+
+    @InjectMocks
     private Library library;
-    private ArrayList<Item> items;
 
-    @Before
-    public void setUp(){
-        this.library = new Library();
-        this.items = new ArrayList<>();
-        this.setUpBooks();
-        this.setUpMovies();
-    }
-
-    private void setUpBooks() {
-        this.items.add(new Book("The Great Gatsby", 1925, true, "F. Scott Fitzgerald"));
-        this.items.add(new Book("Nineteen Eighty-Four", 1949, true, "George Orwell"));
-        this.items.add(new Book("Ulysses", 1922, true, "James Joyce"));
-    }
-
-    private void setUpMovies() {
-        this.items.add(new Movie("Toy Story", 1995, true, "John Lasseter", "5"));
-        this.items.add(new Movie("How to Train Your Dragon 2", 2014, true, "Dean DeBlois", ""));
-        this.items.add(new Movie("Spirited Away", 1949, true, "Hayao Miyazaki", "4"));
+    @Test
+    public void shouldGetAllBooksAvailable(){
+        library.getAllBooksAvailable();
+        verify(bookRepository).getAvailable();
     }
 
     @Test
-    public void shouldAllBooksAvailable() throws Exception {
-        ArrayList<Item> books = new ArrayList<>();
-        for (Item item: this.items) {
-            if(item instanceof Book){
-                books.add(item);
-            }
-        }
-       books.equals(this.library.getAllBooksAvailable());
+    public void shouldGetAllMoviesAvailable(){
+        library.getAllMoviesAvailable();
+        verify(movieRepository).getAvailable();
     }
 
     @Test
     public void shouldCheckoutBook(){
-        assertEquals(true, this.library.checkoutBook("Ulysses"));
+        Book book = new Book("Ulysses", 1922, true, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(newArrayList(book));
+        when(bookRepository.getByName("Ulysses")).thenReturn(book);
+        assertTrue(library.checkoutBook("Ulysses"));
     }
 
     @Test
     public void shouldNotCheckoutBook(){
-        assertEquals(false, this.library.checkoutBook("The Grapes of Wrath"));
+        Book book = new Book("Ulysses", 1922, false, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(new ArrayList<Book>());
+        when(bookRepository.getByName("Ulysses")).thenReturn(book);
+        assertFalse(library.checkoutBook("Ulysses"));
+    }
+
+    @Test
+    public void shouldNotCheckoutNonExistentBook(){
+        Book book = new Book("Ulysses", 1922, false, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(newArrayList(book));
+        when(bookRepository.getByName("NonExistentBook")).thenReturn(null);
+        assertFalse(library.checkoutBook("NonExistentBook"));
     }
 
     @Test
     public void shouldReturnBook(){
-        assertEquals(true, this.library.returnBook("The Grapes of Wrath"));
+        Book book = new Book("Ulysses", 1922, false, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(new ArrayList<Book>());
+        when(bookRepository.getByName("Ulysses")).thenReturn(book);
+        assertTrue(library.returnBook("Ulysses"));
     }
 
     @Test
-    public void shouldNotReturnBook(){
-        assertEquals(false, this.library.returnBook("Ulysses"));
+    public void shouldNotReturnAvailableBook(){
+        Book book = new Book("Ulysses", 1922, true, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(newArrayList(book));
+        when(bookRepository.getByName("Ulysses")).thenReturn(book);
+        assertFalse(library.returnBook("Ulysses"));
+    }
+
+    @Test
+    public void shouldNotReturnNonExistentBook(){
+        Book book = new Book("Ulysses", 1922, true, "James Joyce");
+        when(bookRepository.getAvailable()).thenReturn(newArrayList(book));
+        when(bookRepository.getByName("NonExistentBook")).thenReturn(null);
+        assertFalse(library.returnBook("NonExistentBook"));
     }
 
     @Test
     public void shouldCheckoutMovie(){
-        assertEquals(true, this.library.checkoutMovie("Toy Story"));
+        Movie movie = new Movie("Toy Story", 1995, true, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(newArrayList(movie));
+        when(movieRepository.getByName("Toy Story")).thenReturn(movie);
+        assertTrue(library.checkoutMovie("Toy Story"));
+    }
+
+    @Test
+    public void shouldNotCheckoutNonExistentMovie(){
+        Movie movie = new Movie("Toy Story", 1995, true, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(newArrayList(movie));
+        when(movieRepository.getByName("NonExistentMovie")).thenReturn(null);
+        assertFalse(library.checkoutMovie("NonExistentMovie"));
     }
 
     @Test
     public void shouldNotCheckoutMovie(){
-        assertEquals(false, this.library.checkoutMovie("How to Train Your Dragon 2"));
+        Movie movie = new Movie("Toy Story", 1995, true, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(new ArrayList<Movie>());
+        when(movieRepository.getByName("Toy Story")).thenReturn(movie);
+        assertFalse(library.checkoutMovie("Toy Story"));
     }
 
     @Test
     public void shouldReturnMovie(){
-        assertEquals(true, this.library.returnMovie("How to Train Your Dragon 2"));
+        Movie movie = new Movie("Toy Story", 1995, false, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(new ArrayList<Movie>());
+        when(movieRepository.getByName("Toy Story")).thenReturn(movie);
+        assertTrue(library.returnMovie("Toy Story"));
     }
 
     @Test
-    public void shouldNotReturnMovie(){
-        assertEquals(false, this.library.returnMovie("Toy Story"));
+    public void shouldNotReturnAvailableMovie(){
+        Movie movie = new Movie("Toy Story", 1995, false, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(newArrayList(movie));
+        when(movieRepository.getByName("Toy Story")).thenReturn(movie);
+        assertFalse(library.returnMovie("Toy Story"));
+    }
+
+    @Test
+    public void shouldNotReturnNonExistentMovie(){
+        Movie movie = new Movie("Toy Story", 1995, false, "John Lasseter", "5");
+        when(movieRepository.getAvailable()).thenReturn(newArrayList(movie));
+        when(movieRepository.getByName("NonExistentMovie")).thenReturn(null);
+        assertFalse(library.returnMovie("NonExistentMovie"));
     }
 
 }

@@ -1,7 +1,6 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.Util.ConsolePrinter;
-import com.twu.biblioteca.Util.ContentPrinter;
+import com.twu.biblioteca.print.Printer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +8,15 @@ import java.util.List;
 public class Menu {
 
     private final Library library;
+    private final Printer printer;
+    private final InputManager inputManager;
 
-    public Menu(Library library) {
+    public Menu(Printer printer, Library library, InputManager inputManager) {
+        this.printer = printer;
         this.library = library;
+        this.inputManager = inputManager;
     }
-    
+
     public String getMenuMessage() {
         return "Choose from these choices:";
     }
@@ -28,44 +31,46 @@ public class Menu {
     }
 
     private boolean checkoutItem() {
-        ConsolePrinter.print("Write the name of the book:");
-        if (library.checkoutBook(InputManager.getInput())) {
-            ConsolePrinter.print("Thank you! Enjoy the book.");
+        printer.print("Write the name of the book:");
+        if (library.checkoutBook(inputManager.getInput())) {
+            printer.print("Thank you! Enjoy the book.");
         } else {
-            ConsolePrinter.print("That book is not available.");
+            printer.print("That book is not available.");
         }
         return true;
     }
-
 
     public boolean handlerMenu(String optionSelected) {
         switch (optionSelected) {
             case "List Books":
             case "1":
-                ContentPrinter.print(library.getAllBooksAvailable());
-                return true;
+                printer.print(library.getAllBooksAvailable());
+                break;
             case "Checkout":
             case "2":
                 checkoutItem();
+                break;
             case "Return":
             case "3":
                 returnItem();
+                break;
             case "Quit":
             case "4":
-                ConsolePrinter.print("Bye!");
+                printer.print("Bye!");
                 return false;
             default:
-                ConsolePrinter.print("Select a valid option!");
-                return true;
+                printer.print("Select a valid option!");
+                break;
         }
+        return true;
     }
 
     private boolean returnItem() {
-        ConsolePrinter.print("Write the name of the book:");
-        if (library.returnBook(InputManager.getInput())) {
-            ConsolePrinter.print("Thank you for returning the book.");
+        printer.print("Write the name of the book:");
+        if (library.returnBook(inputManager.getInput())) {
+            printer.print("Thank you for returning the book.");
         } else {
-            ConsolePrinter.print("That is not a valid book to return.");
+            printer.print("That is not a valid book to return.");
         }
         return true;
     }

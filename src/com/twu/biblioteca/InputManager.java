@@ -5,16 +5,20 @@ import java.util.Scanner;
 
 public class InputManager {
 
-    public static String getInputPassword() {
-        Console console = System.console();
+    private final Scanner scanner;
+    private final Console console;
+
+    public InputManager(Console console, Scanner scanner) {
+        this.console = console;
+        this.scanner = scanner;
+    }
+
+    public String getInputPassword() {
         char passwordArray[] = console.readPassword("Enter your Password: ");
         return new String(passwordArray);
     }
 
-    public static String getInput() {
-        String selection;
-        Scanner input = new Scanner(System.in);
-        selection = input.nextLine();
-        return selection;
+    public String getInput() {
+        return scanner.nextLine();
     }
 }

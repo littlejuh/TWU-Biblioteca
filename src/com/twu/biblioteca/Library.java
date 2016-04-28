@@ -1,85 +1,63 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
+import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
+import com.twu.biblioteca.repository.BookRepository;
+import com.twu.biblioteca.repository.MovieRepository;
+
 import java.util.List;
 
 public class Library {
-    private final ArrayList<Item> items = new ArrayList<>();
-    public Library() {
-        this.setUpBooks();
-        this.setUpMovies();
+    private BookRepository bookRepository;
+    private MovieRepository movieRepository;
+    public Library(BookRepository bookRepository, MovieRepository movieRepository) {
+        this.bookRepository = bookRepository;
+        this.movieRepository = movieRepository;
     }
 
-    private void setUpBooks() {
-        this.items.add(new Book("The Great Gatsby", 1925, true, "F. Scott Fitzgerald"));
-        this.items.add(new Book("The Grapes of Wrath", 1940, false, "John Steinbeck"));
-        this.items.add(new Book("Nineteen Eighty-Four", 1949, true, "George Orwell"));
-        this.items.add(new Book("Ulysses", 1922, true, "James Joyce"));
+
+    public List<Book> getAllBooksAvailable() {
+        return bookRepository.getAvailable();
     }
 
-    private void setUpMovies() {
-        this.items.add(new Movie("Toy Story", 1995, true, "John Lasseter", "5"));
-        this.items.add(new Movie("How to Train Your Dragon 2", 2014, false, "Dean DeBlois", ""));
-        this.items.add(new Movie("Spirited Away", 1949, true, "Hayao Miyazaki", "4"));
-        this.items.add(new Movie("Aladdin",  1922, true, "John Musker", "3"));
+    public List<Movie> getAllMoviesAvailable() {
+        return movieRepository.getAvailable();
     }
 
-    public ArrayList<Item> getAllBooksAvailable() {
-        ArrayList<Item> availableBooks = new ArrayList<>();
-        for (Item book : this.items) {
-            if(book instanceof Book && book.isAvailable()){
-                    availableBooks.add(book);
-            }
-        }
-        return availableBooks;
-    }
-
-    public ArrayList<Item> getAllMoviesAvailable() {
-        ArrayList<Item> availableMovies = new ArrayList<>();
-        for (Item movie : this.items) {
-            if(movie instanceof Movie && movie.isAvailable()){
-                availableMovies.add(movie);
-            }
-        }
-        return availableMovies;
-    }
 
     public boolean checkoutBook(String inputName){
-        for(Item book : this.items){
-            if(book instanceof Book && book.getName().equals(inputName) && book.isAvailable()){
-                book.setAvailable(false);
-                return true;
-            }
+        Book book = bookRepository.getByName(inputName);
+        if(bookRepository.getAvailable().contains(book)){
+            bookRepository.updateAvailableStatus(book);
+            return true;
         }
         return false;
     }
 
     public boolean checkoutMovie(String inputName){
-        for(Item movie : this.items){
-            if(movie instanceof Movie && movie.getName().equals(inputName) && movie.isAvailable()){
-                movie.setAvailable(false);
-                return true;
-            }
+       Movie movie = movieRepository.getByName(inputName);
+        if(movieRepository.getAvailable().contains(movie)){
+            movieRepository.updateAvailableStatus(movie);
+            return true;
         }
         return false;
     }
 
     public boolean returnBook(String inputName) {
-        for(Item book : this.items){
-            if(book instanceof Book && book.getName().equals(inputName) && !book.isAvailable()){
-                book.setAvailable(true);
-                return true;
-            }
+        Book book = bookRepository.getByName(inputName);
+
+        if(!bookRepository.getAvailable().contains(book) && book != null){
+            bookRepository.updateAvailableStatus(book);
+            return true;
         }
         return false;
     }
 
     public boolean returnMovie(String inputName) {
-        for(Item movie : this.items){
-            if(movie instanceof Movie && movie.getName().equals(inputName) && !movie.isAvailable()){
-                movie.setAvailable(true);
-                return true;
-            }
+        Movie movie = movieRepository.getByName(inputName);
+        if(!movieRepository.getAvailable().contains(movie) && movie != null){
+            movieRepository.updateAvailableStatus(movie);
+            return true;
         }
         return false;
     }

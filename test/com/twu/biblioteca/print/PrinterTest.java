@@ -1,4 +1,4 @@
-package com.twu.biblioteca.Util;
+package com.twu.biblioteca.print;
 
 import org.junit.Test;
 
@@ -9,7 +9,19 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
-public class ContentPrinterTest {
+public class PrinterTest {
+    private Printer printer = new Printer();
+
+    @Test
+    public void shouldPrintCorrectly() throws IOException {
+        String expected = "Hello World!";
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(bo));
+        printer.print(expected);
+        bo.flush();
+        String allWrittenLines = new String(bo.toByteArray());
+        assertTrue(allWrittenLines.contains("Hello World!"));
+    }
 
     @Test
     public void shouldPrintContentCorrectly() throws IOException {
@@ -19,7 +31,7 @@ public class ContentPrinterTest {
         expected.add("!");
         ByteArrayOutputStream bo = new ByteArrayOutputStream();
         System.setOut(new PrintStream(bo));
-        ContentPrinter.print(expected);
+        printer.print(expected);
         bo.flush();
         String allWrittenLines = new String(bo.toByteArray());
         assertTrue(allWrittenLines.contains("Hello\n" + "World\n" + "!\n"));
