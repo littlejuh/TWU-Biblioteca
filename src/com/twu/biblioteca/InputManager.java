@@ -6,16 +6,9 @@ import java.util.Scanner;
 public class InputManager {
 
     private final Scanner scanner;
-    private final Console console;
 
-    public InputManager(Console console, Scanner scanner) {
-        this.console = console;
+    public InputManager(Scanner scanner) {
         this.scanner = scanner;
-    }
-
-    public String getInputPassword() {
-        char passwordArray[] = console.readPassword("Enter your Password: ");
-        return new String(passwordArray);
     }
 
     public String getInput() {

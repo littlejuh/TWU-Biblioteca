@@ -10,11 +10,13 @@ public class Menu {
     private final Library library;
     private final Printer printer;
     private final InputManager inputManager;
+    private final Security security;
 
-    public Menu(Printer printer, Library library, InputManager inputManager) {
+    public Menu(Printer printer, Library library, InputManager inputManager, Security security) {
         this.printer = printer;
         this.library = library;
         this.inputManager = inputManager;
+        this.security = security;
     }
 
     public String getMenuMessage() {
@@ -42,6 +44,9 @@ public class Menu {
 
     public boolean handlerMenu(String optionSelected) {
         switch (optionSelected) {
+            case "Login":
+            case "0":
+                login();
             case "List Books":
             case "1":
                 printer.print(library.getAllBooksAvailable());
@@ -54,14 +59,36 @@ public class Menu {
             case "3":
                 returnItem();
                 break;
-            case "Quit":
+            case "Personal Info":
             case "4":
+                personalInfo();
+                break;
+            case "Quit":
+            case "5":
                 printer.print("Bye!");
                 return false;
             default:
                 printer.print("Select a valid option!");
                 break;
         }
+        return true;
+    }
+
+    private boolean login() {
+        if(security.isLogged()){
+            printer.print("Your user is already logged in. Type other option.");
+        }else{
+        printer.print("Please, type your account ID.");
+        String accountId = inputManager.getInput();
+        printer.print("Please, type your password.");
+        String password = inputManager.getInput();
+        security.login(accountId, password);
+        }
+        return true;
+    }
+
+    private boolean personalInfo() {
+        printer.print(security.getPersonalInfo());
         return true;
     }
 

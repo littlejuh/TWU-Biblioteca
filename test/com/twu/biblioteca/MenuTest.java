@@ -27,6 +27,9 @@ public class MenuTest {
     @Mock
     private InputManager inputManager;
 
+    @Mock
+    private Security security;
+
     @InjectMocks
     private Menu menu;
 
@@ -46,6 +49,22 @@ public class MenuTest {
     }
 
     @Test
+    public void shouldLoginWhenUserSelectOptionZeroAndUserIsNotLogged() {
+        boolean menuReturn = menu.handlerMenu("0");
+        when(security.isLogged()).thenReturn(false);
+        verify(inputManager, times(2)).getInput();
+        assertTrue(menuReturn);
+    }
+
+    @Test
+    public void shouldLoginWhenUserSelectOptionZeroAndUserIsLogged() {
+        boolean menuReturn = menu.handlerMenu("0");
+        when(security.isLogged()).thenReturn(true);
+        verify(printer).print("Your user is already logged in. Type other option.");
+        assertTrue(menuReturn);
+    }
+
+    @Test
     public void shouldListAllBooksWhenUserSelectOptionOne() {
         ArrayList<Book> expected = new ArrayList<>(getBookList());
         when(library.getAllBooksAvailable()).thenReturn(expected);
@@ -62,8 +81,26 @@ public class MenuTest {
     }
 
     @Test
-    public void shouldReturnFinalMessageWhenUserSelectedOptionFour(){
+    public void shouldReturnPersonalInfoWhenUserSelectOptionFourAndUserIsLogged(){
+        when(security.isLogged()).thenReturn(true);
         boolean menuReturn = menu.handlerMenu("4");
+        verify(security).getPersonalInfo();
+        assertTrue(menuReturn);
+    }
+
+
+    // TODO: FIX-ME
+    @Test
+    public void shouldReturnPersonalInfoWhenUserSelectOptionFourAndUserIsNotLogged(){
+        when(security.isLogged()).thenReturn(false);
+        boolean menuReturn = menu.handlerMenu("4");
+        when(security.getPersonalInfo()).thenReturn("ERROR; The user is not logged. Type 0 to login.");
+        assertTrue(menuReturn);
+    }
+
+    @Test
+    public void shouldReturnFinalMessageWhenUserSelectedOptionFive(){
+        boolean menuReturn = menu.handlerMenu("5");
         verify(printer).print("Bye!");
         assertFalse(menuReturn);
     }
@@ -72,7 +109,7 @@ public class MenuTest {
         return new Book(name, 2014, true, "Juliana");
     }
 
-    public List<Book> getBookList() {
+    private List<Book> getBookList() {
         List<Book> bookList = new ArrayList<>();
         bookList.add(getBookWith("Livro 1"));
         bookList.add(getBookWith("Livro 2"));
