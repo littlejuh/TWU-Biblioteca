@@ -26,18 +26,18 @@ public class Library {
     }
 
 
-    public boolean checkoutBook(String inputName){
+    public boolean checkoutBook(String inputName) {
         Book book = bookRepository.getByName(inputName);
-        if(bookRepository.getAvailable().contains(book)){
+        if (bookRepository.getAvailable().contains(book)) {
             bookRepository.updateAvailableStatus(book);
             return true;
         }
         return false;
     }
 
-    public boolean checkoutMovie(String inputName){
-       Movie movie = movieRepository.getByName(inputName);
-        if(movieRepository.getAvailable().contains(movie)){
+    public boolean checkoutMovie(String inputName) {
+        Movie movie = movieRepository.getByName(inputName);
+        if (movieRepository.getAvailable().contains(movie)) {
             movieRepository.updateAvailableStatus(movie);
             return true;
         }
@@ -47,7 +47,7 @@ public class Library {
     public boolean returnBook(String inputName) {
         Book book = bookRepository.getByName(inputName);
 
-        if(!bookRepository.getAvailable().contains(book) && book != null){
+        if (!bookRepository.getAvailable().contains(book) && book != null) {
             bookRepository.updateAvailableStatus(book);
             return true;
         }
@@ -56,7 +56,7 @@ public class Library {
 
     public boolean returnMovie(String inputName) {
         Movie movie = movieRepository.getByName(inputName);
-        if(!movieRepository.getAvailable().contains(movie) && movie != null){
+        if (!movieRepository.getAvailable().contains(movie) && movie != null) {
             movieRepository.updateAvailableStatus(movie);
             return true;
         }

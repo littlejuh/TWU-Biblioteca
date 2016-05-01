@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 import com.twu.biblioteca.print.Printer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,25 +42,30 @@ public class MenuTest {
     @Test
     public void shouldGetOptionsMenu() {
         List<String> optionsMenu = new ArrayList<>();
+        optionsMenu.add("0 - Login");
         optionsMenu.add("1 - List Books");
-        optionsMenu.add("2 - Checkout Book");
-        optionsMenu.add("3 - Return Book");
-        optionsMenu.add("4 - Quit");
+        optionsMenu.add("2 - List Movies");
+        optionsMenu.add("3 - Checkout Movie");
+        optionsMenu.add("4 - Return Movie");
+        optionsMenu.add("5 - Checkout Book");
+        optionsMenu.add("6 - Return Book");
+        optionsMenu.add("7 - Personal Info");
+        optionsMenu.add("8 - Quit");
         assertEquals(optionsMenu, menu.getOptionsMenu());
     }
 
     @Test
     public void shouldLoginWhenUserSelectOptionZeroAndUserIsNotLogged() {
-        boolean menuReturn = menu.handlerMenu("0");
         when(security.isLogged()).thenReturn(false);
+        boolean menuReturn = menu.handlerMenu("0");
         verify(inputManager, times(2)).getInput();
         assertTrue(menuReturn);
     }
 
     @Test
     public void shouldLoginWhenUserSelectOptionZeroAndUserIsLogged() {
-        boolean menuReturn = menu.handlerMenu("0");
         when(security.isLogged()).thenReturn(true);
+        boolean menuReturn = menu.handlerMenu("0");
         verify(printer).print("Your user is already logged in. Type other option.");
         assertTrue(menuReturn);
     }
@@ -73,23 +79,49 @@ public class MenuTest {
         assertTrue(menuReturn);
     }
 
+    @Test
+    public void shouldListAllMoviesWhenUserSelectOptionOne() {
+        ArrayList<Movie> expected = new ArrayList<>(getMovieList());
+        when(library.getAllMoviesAvailable()).thenReturn(expected);
+        boolean menuReturn = menu.handlerMenu("2");
+        verify(printer).print(expected);
+        assertTrue(menuReturn);
+    }
+
    @Test
-    public void shouldCheckoutBookWhenUserSelectOptionTwo() {
-       boolean menuReturn = menu.handlerMenu("2");
+    public void shouldCheckoutBookWhenUserSelectOptionFourAndUserIsLogged() {
+       when(security.isLogged()).thenReturn(true);
+       when(library.checkoutBook(anyString())).thenReturn(true);
+       boolean menuReturn = menu.handlerMenu("4");
        verify(printer, times(2)).print(anyString());
        assertTrue(menuReturn);
     }
 
     @Test
-    public void shouldReturnPersonalInfoWhenUserSelectOptionFourAndUserIsLogged(){
+    public void shouldCheckoutBookWhenUserSelectOptionFourAndUserIsLoggedButBookIsNotAvailable() {
         when(security.isLogged()).thenReturn(true);
+        when(library.checkoutBook(anyString())).thenReturn(false);
         boolean menuReturn = menu.handlerMenu("4");
+        verify(printer, times(2)).print(anyString());
+        assertTrue(menuReturn);
+    }
+
+    @Test
+    public void shouldCheckoutBookWhenUserSelectOptionFourAndUserIsNotLogged() {
+        when(security.isLogged()).thenReturn(false);
+        boolean menuReturn = menu.handlerMenu("4");
+        verify(printer).print("ERROR; The user is not logged. Type 0 to login.");
+        assertTrue(menuReturn);
+    }
+
+    @Test
+    public void shouldReturnPersonalInfoWhenUserSelectOptionSevenAndUserIsLogged(){
+        when(security.isLogged()).thenReturn(true);
+        boolean menuReturn = menu.handlerMenu("7");
         verify(security).getPersonalInfo();
         assertTrue(menuReturn);
     }
 
-
-    // TODO: FIX-ME
     @Test
     public void shouldReturnPersonalInfoWhenUserSelectOptionFourAndUserIsNotLogged(){
         when(security.isLogged()).thenReturn(false);
@@ -99,8 +131,8 @@ public class MenuTest {
     }
 
     @Test
-    public void shouldReturnFinalMessageWhenUserSelectedOptionFive(){
-        boolean menuReturn = menu.handlerMenu("5");
+    public void shouldReturnFinalMessageWhenUserSelectedOptionEight(){
+        boolean menuReturn = menu.handlerMenu("8");
         verify(printer).print("Bye!");
         assertFalse(menuReturn);
     }
@@ -114,5 +146,16 @@ public class MenuTest {
         bookList.add(getBookWith("Livro 1"));
         bookList.add(getBookWith("Livro 2"));
         return bookList;
+    }
+
+    private Movie getMovieWith(String name) {
+        return new Movie(name, 2014, true, "Juliana", "1");
+    }
+
+    private List<Movie> getMovieList() {
+        List<Movie> movieList = new ArrayList<>();
+        movieList.add(getMovieWith("Filme 1"));
+        movieList.add(getMovieWith("Filme 2"));
+        return movieList;
     }
 }

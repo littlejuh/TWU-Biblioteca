@@ -2,12 +2,12 @@ package com.twu.biblioteca.model;
 
 public class Book {
 
-    private final  String name;
+    private final String name;
     private final int year;
     private boolean available;
     private final String author;
 
-    public Book(String name, int year, boolean available, String author){
+    public Book(String name, int year, boolean available, String author) {
         this.name = name;
         this.year = year;
         this.available = available;

@@ -1,13 +1,13 @@
 package com.twu.biblioteca.model;
 
 public class Movie {
-    private final  String director;
+    private final String director;
     private final String rating;
     private final String name;
     private final int year;
     private boolean available;
 
-    public Movie(String name, int year, boolean available, String director, String rating){
+    public Movie(String name, int year, boolean available, String director, String rating) {
         this.name = name;
         this.year = year;
         this.available = available;

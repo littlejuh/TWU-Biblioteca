@@ -17,7 +17,7 @@ public class Security {
     }
 
     public void login(String accountId, String password) {
-        if(user.getAccount().equals(accountId) && user.getPassword().equals(password)) {
+        if (user.getAccount().equals(accountId) && user.getPassword().equals(password)) {
             logged = true;
         } else {
             logged = false;
@@ -25,7 +25,7 @@ public class Security {
     }
 
     public String getPersonalInfo() {
-        if(isLogged()){
+        if (isLogged()) {
             return user.toString();
         }
         return "ERROR; The user is not logged. Type 0 to login.";

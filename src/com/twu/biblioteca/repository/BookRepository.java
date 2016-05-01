@@ -17,8 +17,8 @@ public class BookRepository {
 
     public List<Book> getAvailable() {
         List<Book> booksAvailable = new ArrayList<>();
-        for (Book book: books) {
-            if(book.isAvailable()){
+        for (Book book : books) {
+            if (book.isAvailable()) {
                 booksAvailable.add(book);
             }
         }
@@ -33,18 +33,18 @@ public class BookRepository {
     }
 
     public Book getByName(String name) {
-        for (Book book: this.books) {
-            if(book.getName().equals(name)){
+        for (Book book : this.books) {
+            if (book.getName().equals(name)) {
                 return book;
             }
         }
-         return null;
+        return null;
     }
 
     public void updateAvailableStatus(Book book) {
-        if(book.isAvailable()){
+        if (book.isAvailable()) {
             book.setAvailable(false);
-        }else{
+        } else {
             book.setAvailable(true);
         }
     }

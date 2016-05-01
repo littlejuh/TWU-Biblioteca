@@ -17,24 +17,24 @@ public class MovieRepository {
 
     public List<Movie> getAvailable() {
         List<Movie> moviesAvailable = new ArrayList<>();
-        for (Movie movie: movies) {
-            if(movie.isAvailable()){
+        for (Movie movie : movies) {
+            if (movie.isAvailable()) {
                 moviesAvailable.add(movie);
             }
         }
         return moviesAvailable;
     }
 
-    private List<Movie> create(){
-        return  newArrayList(new Movie("Toy Story", 1995, true, "John Lasseter", "5"),
+    private List<Movie> create() {
+        return newArrayList(new Movie("Toy Story", 1995, true, "John Lasseter", "5"),
                 new Movie("How to Train Your Dragon 2", 2014, false, "Dean DeBlois", ""),
                 new Movie("Spirited Away", 1949, true, "Hayao Miyazaki", "4"),
                 new Movie("Aladdin", 1922, true, "John Musker", "3"));
     }
 
     public Movie getByName(String name) {
-        for (Movie movie: this.movies) {
-            if(movie.getName().equals(name)){
+        for (Movie movie : this.movies) {
+            if (movie.getName().equals(name)) {
                 return movie;
             }
         }
@@ -42,9 +42,9 @@ public class MovieRepository {
     }
 
     public void updateAvailableStatus(Movie movie) {
-        if(movie.isAvailable()){
+        if (movie.isAvailable()) {
             movie.setAvailable(false);
-        }else{
+        } else {
             movie.setAvailable(true);
         }
     }
